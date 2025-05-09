@@ -1,1 +1,0 @@
-# Kubernets_Application_Assignment
