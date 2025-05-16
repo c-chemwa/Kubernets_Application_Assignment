@@ -6,24 +6,6 @@ This project demonstrates deploying a multi-component application (Widgetario) o
 
 ```
 hackathon/
-├── products-db/
-│   └── <K8s manifests for DB>
-├── products-api/
-│   └── <K8s manifests for Products API>
-├── stock-api/
-│   └── <K8s manifests for Stock API>
-├── web/
-│   └── <K8s manifests for Web frontend>
-├── ingress/
-│   └── <Ingress configuration>
-├── config/
-│   └── <ConfigMaps and Secrets>
-├── production/
-│   └── <Hardening manifests>
-├── observability/
-│   └── <Prometheus, Grafana, etc.>
-├── ci-cd/
-│   └── <Helm charts, Jenkinsfile, etc.>
 project/
 files/
 
