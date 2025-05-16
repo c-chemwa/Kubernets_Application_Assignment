@@ -46,10 +46,10 @@ eval $(minikube docker-env)
 3. **Apply Kubernetes Manifests (Part 1)**
 
 ```bash
-kubectl apply -f solution-part-1/products-db \
-               -f solution-part-1/products-api \
-               -f solution-part-1/stock-api \
-               -f solution-part-1/web
+kubectl apply -f hackathon/products-db \
+               -f hackathon/products-api \
+               -f hackathon/stock-api \
+               -f hackathon/web
 ```
 
 4. **Check Services**
