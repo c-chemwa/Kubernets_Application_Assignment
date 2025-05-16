@@ -2,48 +2,63 @@
 
 This project demonstrates deploying a multi-component application (Widgetario) on Kubernetes using Minikube. It includes microservices for products and stock management, a frontend web interface, and a PostgreSQL database.
 
+---
+
 ## 🧱 Repository Structure
 
-```
 solution-part-1/
 ├── products-db/
-│   └── <K8s manifests for DB>
+│ └── <K8s manifests for DB>
 ├── products-api/
-│   └── <K8s manifests for Products API>
+│ └── <K8s manifests for Products API>
 ├── stock-api/
-│   └── <K8s manifests for Stock API>
+│ └── <K8s manifests for Stock API>
 ├── web/
-│   └── <K8s manifests for Web frontend>
+│ └── <K8s manifests for Web frontend>
 solution-part-2/
 ├── ingress/
-│   └── <Ingress configuration>
+│ └── <Ingress configuration>
 ├── config/
-│   └── <ConfigMaps and Secrets>
+│ └── <ConfigMaps and Secrets>
 ├── production/
-│   └── <Hardening manifests>
+│ └── <Hardening manifests>
 ├── observability/
-│   └── <Prometheus, Grafana, etc.>
+│ └── <Prometheus, Grafana, etc.>
 ├── ci-cd/
-│   └── <Helm charts, Jenkinsfile, etc.>
-```
+│ └── <Helm charts, Jenkinsfile, etc.>
+
+yaml
+Copy
+Edit
+
+---
 
 ## 📌 Project Overview
 
 Widgetario is a containerized microservices app deployed and managed on Kubernetes. It features:
 
-- **products-db**: PostgreSQL database
-- **products-api**: RESTful API to access product data
-- **stock-api**: Service managing stock levels
-- **web**: Frontend for users
-- Kubernetes concepts: Deployments, Services, Ingress, ConfigMaps, Secrets, NodePorts, LoadBalancer, Observability, CI/CD
+- **products-db**: PostgreSQL database  
+- **products-api**: RESTful API to access product data  
+- **stock-api**: Service managing stock levels  
+- **web**: Frontend for users  
+
+Kubernetes concepts used:
+
+- Deployments, Services  
+- Ingress, ConfigMaps, Secrets  
+- NodePorts, LoadBalancer  
+- Observability (Prometheus/Grafana)  
+- CI/CD (Helm, Jenkins)  
+
+---
 
 ## ⚙️ Installation and Setup
 
 ### Prerequisites
 
-- Docker
-- Minikube
-- kubectl
+- Docker  
+- Minikube  
+- kubectl  
 
 ### Steps
 
@@ -51,92 +66,115 @@ Widgetario is a containerized microservices app deployed and managed on Kubernet
 
 ```bash
 minikube start
-```
+Set Docker environment to Minikube
 
-2. **Set Docker env to Minikube**
-
-```bash
+bash
+Copy
+Edit
 eval $(minikube docker-env)
-```
+Apply Kubernetes Manifests (Part 1)
 
-3. **Apply Kubernetes Manifests (Part 1)**
-
-```bash
+bash
+Copy
+Edit
 kubectl apply -f solution-part-1/products-db \
                -f solution-part-1/products-api \
                -f solution-part-1/stock-api \
                -f solution-part-1/web
-```
+Check Services
 
-4. **Check Services**
-
-```bash
+bash
+Copy
+Edit
 kubectl get services
-```
+Look for widgetario-web-np (NodePort) or widgetario-web-lb (LoadBalancer).
 
-Look for `widgetario-web-np` (NodePort) or `widgetario-web-lb` (LoadBalancer).
+Access Web App
 
-5. **Access Web App**
-
-```bash
+bash
+Copy
+Edit
 minikube ip
 # Example Output: 192.168.49.2
 
 # If NodePort exposed on 30008
 http://192.168.49.2:30008
-```
+🛠️ Code Documentation
+Each Kubernetes manifest is documented using inline comments to explain:
 
----
+Key fields like metadata, spec, selector, etc.
 
-## 🛠️ Code Documentation
+Relationships between services, deployments, and pods
 
-Each deployment and service YAML is commented to explain key fields. All files follow consistent naming, indentation, and structure.
+Port mappings and access types
 
-## ✅ Testing
+All YAML files follow clean formatting and consistent naming conventions.
 
-### Manual Testing
+✅ Testing
+Manual Testing
+After deployment, visit the frontend via the exposed IP and port:
 
-Once deployed, access the frontend via the IP and port above. Verify:
-- Product list loads
-- Stock API responds correctly
-- Database is connected
+Confirm products list displays
 
-### Optional: Automated Testing
+Confirm stock service updates/reads correctly
 
-Add unit tests to each microservice and expose health-check endpoints. Include testing commands and results in future development.
+Ensure no errors in logs for any pod
 
-## 🚀 Deployment Instructions
+Use kubectl logs <pod-name> for debugging
 
-1. Ensure Docker images are built and available to Minikube:
-   ```bash
-   eval $(minikube docker-env)
-   docker build -t products-api ./products-api
-   docker build -t stock-api ./stock-api
-   docker build -t web ./web
-   ```
+Optional: Automated Testing
+Add health check routes in services and CI tests in the /ci-cd stage.
 
-2. Apply all manifests (as shown above).
+🚀 Deployment Instructions
+Ensure Docker images are built and available to Minikube
 
-3. Access the app using `minikube ip` + exposed port.
+bash
+Copy
+Edit
+eval $(minikube docker-env)
 
-## 📊 Additional Materials
+# Build the images
+docker build -t products-api ./products-api
+docker build -t stock-api ./stock-api
+docker build -t web ./web
+Apply manifests
 
-- Observability setup: Prometheus, Grafana (in `/observability`)
-- Production best practices: Resource limits, readiness probes (`/production`)
-- Configurations: ConfigMaps & Secrets (`/config`)
-- Ingress and Load Balancing (`/ingress`)
-- CI/CD pipeline: Helm, Jenkinsfile (`/ci-cd`)
+bash
+Copy
+Edit
+kubectl apply -f solution-part-1/products-db \
+               -f solution-part-1/products-api \
+               -f solution-part-1/stock-api \
+               -f solution-part-1/web
+Access via browser
 
-## 🔓 Repository Access
+bash
+Copy
+Edit
+minikube ip
+# Visit with IP:PORT (e.g., http://192.168.49.2:30008)
+📊 Additional Materials
+Observability: Prometheus + Grafana dashboards (/observability)
 
-Ensure this repository is public **or** that required users are invited with appropriate permissions.
+Production configs: Readiness probes, resource limits (/production)
 
----
+Secrets & ConfigMaps: Loaded via /config
 
-## 🙌 Acknowledgments
+Ingress & Routing: /ingress contains ingress YAML
 
-- Kubernetes
-- Minikube
-- Docker
-- Prometheus + Grafana
-- Jenkins + Helm
+CI/CD Setup: Helm charts, Jenkinsfile (/ci-cd)
+
+🔓 Repository Access
+Ensure this repo is public or that your reviewer has access if private.
+All files should be committed, structured cleanly, and documented.
+
+🙌 Acknowledgments
+Kubernetes
+
+Minikube
+
+Docker
+
+Prometheus + Grafana
+
+Jenkins + Helm
